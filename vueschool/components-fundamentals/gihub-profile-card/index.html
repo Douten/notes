@@ -40,36 +40,36 @@
 
   <!-- Your JavaScript Code :) -->
   <script>
-Vue.component("github-user-card", {
-  template: "#github-user-card-template",
-  props: {
-    username: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      userInfo: null,
-      year: null
-    };
-  },
-  created() {
-    axios
-      .get(`https://api.github.com/users/${this.username}`)
-      .then(response => (this.userInfo = response.data))
-      .catch(error => console.log(error))
-      .finally(() => {
-        const joined = new Date(this.userInfo.created_at);
-        this.year = joined.getUTCFullYear();
-      });
-  }
-});
+    Vue.component("github-user-card", {
+      template: "#github-user-card-template",
+      props: {
+        username: {
+          type: String,
+          required: true
+        }
+      },
+      data() {
+        return {
+          userInfo: null,
+          year: null
+        };
+      },
+      created() {
+        axios
+          .get(`https://api.github.com/users/${this.username}`)
+          .then(response => (this.userInfo = response.data))
+          .catch(error => console.log(error))
+          .finally(() => {
+            const joined = new Date(this.userInfo.created_at);
+            this.year = joined.getUTCFullYear();
+          });
+      }
+    });
 
-new Vue({
-  el: "#app"
-});
-</script>
+    new Vue({
+      el: "#app"
+    });
+  </script>
 </body>
 
 </html>

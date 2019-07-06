@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Shopping List</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div id="shopping-list">
+      <!-- one expression and terinary possible. no var assignment -->
+      <div class="header">
+        <h1>{{ header.toLocaleUpperCase() }}</h1>
+        <button
+          v-if="state === 'default'"
+          class="btn btn-primary"
+          @click="changeState('edit')"
+        >
+          Add Item
+        </button>
+        <button v-else class="btn btn-cancel" @click="changeState('default')">
+          Cancel
+        </button>
+      </div>
+      <div v-if="state === 'edit'" class="add-item-form">
+        <input
+          type="text"
+          v-model="newItem"
+          placeholder="Add an item"
+          @keyup.enter="saveItem"
+        />
+        <!-- v-on:click shortcut => @click -->
+        <button
+          class="btn btn-primary"
+          @click="saveItem"
+          :disabled="newItem.length === 0"
+        >
+          Save Item
+        </button>
+      </div>
+      <ul>
+        <!-- array syntax, more flexibility but verbose -->
+        <!-- :class="[item.purchased ? 'strikeout' : '', item.highPriority ? 'priority' : '' ]" -->
+        <!-- object syntax -->
+        <li
+          v-for="item in reversedItems"
+          :class="{strikeout: item.purchased}"
+          @click="togglePurchased(item)"
+        >
+          {{ item.label }}
+        </li>
+      </ul>
+      <p v-if="items.length === 0">Nice job! You've bought all your items.</p>
+      <!-- two way data binding -->
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+      const shoppingList = new Vue({
+        el: '#shopping-list',
+        data: {
+          state: 'default',
+          header: 'shopping list app', //where we store data to be used
+          newItem: '',
+          items: [
+            { label: '10 party hats', purchased: false },
+            { label: '2 board games', purchased: true },
+            { label: '20 cups', purchased: false }
+          ]
+        },
+        //change presentation only
+        computed: {
+          reversedItems() {
+            return this.items.slice(0).reverse();
+          }
+        },
+        //change data use methods
+        methods: {
+          saveItem() {
+            this.items.push({
+              label: this.newItem,
+              purchased: false
+            });
+            this.newItem = '';
+          },
+          changeState(newState) {
+            this.state = newState;
+            this.newItem = '';
+          },
+          togglePurchased(item) {
+            item.purchased = !item.purchased;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
